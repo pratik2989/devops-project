@@ -5,8 +5,12 @@ on:
     branches:
       - main
 
+env:
+  IMAGE_NAME: pratik3675/devops-html
+
+
 jobs:
-  docker-build:
+  build:
     runs-on: ubuntu-latest
 
 
@@ -23,8 +27,17 @@ jobs:
 
       - name: Build Docker Image
         run: |
-          docker build -t pratik3675/devops-html:${{ github.run_number }} ./app
+          docker build -t $IMAGE_NAME:${{ github.run_number }} ./app
 
       - name: Push Docker Image
         run: |
-          docker push pratik3675/devops-html:${{ github.run_number }}
+          docker push $IMAGE_NAME:${{ github.run_number }}
+
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy Application
+        run: echo "Deploying application..."
